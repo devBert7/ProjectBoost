@@ -303,6 +303,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1474846333, guid: 75113de837bc5463c8e57b36d2dce923, type: 3}
+      propertyPath: m_Mass
+      value: 0.15
+      objectReference: {fileID: 0}
     - target: {fileID: 5126467221950894510, guid: 75113de837bc5463c8e57b36d2dce923,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -365,40 +369,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 75113de837bc5463c8e57b36d2dce923, type: 3}
---- !u!1 &1474846332 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6330617772358720465, guid: 75113de837bc5463c8e57b36d2dce923,
-    type: 3}
-  m_PrefabInstance: {fileID: 1269540801}
-  m_PrefabAsset: {fileID: 0}
---- !u!54 &1474846333
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1474846332}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
---- !u!114 &1474846335
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1474846332}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 987d98674908b4f82a012b3375644d19, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &4060231054380354284
 PrefabInstance:
   m_ObjectHideFlags: 0

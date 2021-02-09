@@ -1,11 +1,18 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Rocket : MonoBehaviour {
 	[SerializeField] float rcsThrust = 250f;
-	[SerializeField] float mainThrust = 150f;
+	[SerializeField] float mainThrust = 10f;
+	[SerializeField] AudioClip mainEngine;
+	[SerializeField] AudioClip crash;
+	[SerializeField] AudioClip advance;
 
 	Rigidbody rigidBody;
 	AudioSource audioSource;
+
+	enum State {Alive, Dying, Transcending};
+	State state = State.Alive;
 
 	void Start() {
 		rigidBody = GetComponent<Rigidbody>();
@@ -13,24 +20,70 @@ public class Rocket : MonoBehaviour {
 	}
 
 	void Update() {
-		Thrust();
-		Rotate();
+		if (state == State.Alive) {
+			RespondToThrustInput();
+			RespondToRotateInput();
+		}
 	}
 
-	void Thrust() {
-		float thrustThisFrame = mainThrust * Time.deltaTime;
+	void OnCollisionEnter(Collision collision) {
+		if (state != State.Alive) {
+			return;
+		}
 
+		switch (collision.gameObject.tag) {
+			case "Friendly":
+				print("Ok");
+				break;
+
+			case "Finish":
+				StartSuccessSequence();
+				break;
+			
+			default:
+				StartDeathSequence();
+				break;
+		}
+	}
+
+	void StartSuccessSequence() {
+		state = State.Transcending;
+		audioSource.Stop();
+		audioSource.PlayOneShot(advance);
+		Invoke("LoadNextScene", 1f);
+	}
+
+	void StartDeathSequence() {
+		state = State.Dying;
+		audioSource.Stop();
+		audioSource.PlayOneShot(crash);
+		Invoke("GameOver", 1f);
+	}
+
+	void LoadNextScene() {
+		SceneManager.LoadScene(1);
+	}
+
+	void GameOver() {
+		SceneManager.LoadScene(0);
+	}
+
+	void RespondToThrustInput() {
 		if (Input.GetKey(KeyCode.Space)) {
-			rigidBody.AddRelativeForce(Vector3.up * thrustThisFrame);
-			if (!audioSource.isPlaying) {
-					audioSource.Play();
-			}
+			ApplyThrust();
 		} else {
 			audioSource.Stop();
 		}
 	}
 
-	void Rotate() {
+	void ApplyThrust() {
+		rigidBody.AddRelativeForce(Vector3.up * mainThrust);
+		if (!audioSource.isPlaying) {
+				audioSource.PlayOneShot(mainEngine);
+		}
+	}
+
+	void RespondToRotateInput() {
 		rigidBody.freezeRotation = true;
 		float rotationThisFrame = rcsThrust * Time.deltaTime;
 

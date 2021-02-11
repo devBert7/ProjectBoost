@@ -4,9 +4,14 @@ using UnityEngine.SceneManagement;
 public class Rocket : MonoBehaviour {
 	[SerializeField] float rcsThrust = 250f;
 	[SerializeField] float mainThrust = 10f;
+
 	[SerializeField] AudioClip mainEngine;
 	[SerializeField] AudioClip crash;
-	[SerializeField] AudioClip advance;
+	[SerializeField] AudioClip success;
+
+	[SerializeField] ParticleSystem thrustParticles;
+	[SerializeField] ParticleSystem crashParticles;
+	[SerializeField] ParticleSystem successParticles;
 
 	Rigidbody rigidBody;
 	AudioSource audioSource;
@@ -49,14 +54,17 @@ public class Rocket : MonoBehaviour {
 	void StartSuccessSequence() {
 		state = State.Transcending;
 		audioSource.Stop();
-		audioSource.PlayOneShot(advance);
+		audioSource.PlayOneShot(success);
+		successParticles.Play();
 		Invoke("LoadNextScene", 1f);
 	}
 
 	void StartDeathSequence() {
 		state = State.Dying;
 		audioSource.Stop();
+		thrustParticles.Stop();
 		audioSource.PlayOneShot(crash);
+		crashParticles.Play();
 		Invoke("GameOver", 1f);
 	}
 
@@ -73,14 +81,18 @@ public class Rocket : MonoBehaviour {
 			ApplyThrust();
 		} else {
 			audioSource.Stop();
+			thrustParticles.Stop();
 		}
 	}
 
 	void ApplyThrust() {
 		rigidBody.AddRelativeForce(Vector3.up * mainThrust);
+
 		if (!audioSource.isPlaying) {
 				audioSource.PlayOneShot(mainEngine);
 		}
+
+		thrustParticles.Play();
 	}
 
 	void RespondToRotateInput() {
